@@ -1,0 +1,29 @@
+name: Build Extension
+
+on:
+  push:
+    branches: [ ci-build ] # 仅在此分支推送时触发
+  workflow_dispatch:       # 允许手动触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build extension
+        run: npm run build
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vsc-fixed-extension
+          path: dist/  # 确保这里指向插件编译后的输出目录
